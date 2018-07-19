@@ -11,7 +11,6 @@ namespace MegaChallengeWar.Classes
         private Player _playerTwo;
         private Deck _deck;
         private bool _gameOver = false;
-        private Player _winner;
 
         public Player PlayerOne
         {
@@ -68,20 +67,63 @@ namespace MegaChallengeWar.Classes
         {
             while (this._deck.Cards.Count > 0)
             {
-                this._playerOne.Deck.AddCard(this._deck.NextCard());
-                this._playerTwo.Deck.AddCard(this._deck.NextCard());
+                this.PlayerOne.Deck.AddCard(this._deck.NextCard());
+                this.PlayerTwo.Deck.AddCard(this._deck.NextCard());
             }
+        }
+
+        private void checkGameStatus()
+        {
+
+        }
+
+        private bool isOver()
+        {
+            if (this._gameOver) return true;
+
+            if (this.GetWinner() != null)
+            {
+                this._gameOver = true;
+                return true;
+            }
+
+            return false;
+        }
+
+        public void Turn()
+        {
+            if (this.isOver()) return;
+
+            Card playerOneCard = this.PlayerOne.Deck.NextCard();
+            Card playerTwoCard = this.PlayerTwo.Deck.NextCard();
+
+            if (playerOneCard.Value == playerTwoCard.Value)
+            {
+                // this.war();
+
+            }
+            else if (playerOneCard.Value > playerTwoCard.Value)
+            {
+                this.PlayerOne.Deck.AddCard(playerOneCard);
+                this.PlayerOne.Deck.AddCard(playerTwoCard);
+            }
+            else
+            {
+
+                this.PlayerTwo.Deck.AddCard(playerOneCard);
+                this.PlayerTwo.Deck.AddCard(playerTwoCard);
+            }
+
         }
 
         public Player GetWinner()
         {
-            if (!this._gameOver)
-                return null;
+            if (!this._gameOver) return null;
 
             int playerOneCardCount = this._playerOne.Deck.Cards.Count;
             int playerTwoCardCount = this._playerTwo.Deck.Cards.Count;
 
-            return this._winner;
+            return playerOneCardCount == 0 ? this.PlayerOne : this.PlayerTwo;
         }
 
     }

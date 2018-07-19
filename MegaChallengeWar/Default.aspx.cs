@@ -25,6 +25,7 @@ namespace MegaChallengeWar.Classes
                 resultsSb.Append($"{card.Value} - {card.Suit.ToString()} - {card.Face.ToString()}<br/>");
             }
             resultsSb.Append($"<hr/>Count: {game.Deck.Cards.Count}");
+
             resultsLabel.Text = resultsSb.ToString();
         }
     }
