@@ -10,6 +10,8 @@ namespace MegaChallengeWar.Classes
         private Player _playerOne;
         private Player _playerTwo;
         private Deck _deck;
+        private Deck _pool;
+        private bool _isWar = false;
         private bool _gameOver = false;
 
         public Player PlayerOne
@@ -25,6 +27,16 @@ namespace MegaChallengeWar.Classes
         public Deck Deck
         {
             get { return _deck; }
+        }
+
+        public Deck Pool
+        {
+            get { return _pool; }
+        }
+
+        public bool IsWar
+        {
+            get { return _isWar; }
         }
 
         public Game(Player playerOne, Player playerTwo)
@@ -77,7 +89,7 @@ namespace MegaChallengeWar.Classes
 
         }
 
-        private bool isOver()
+        private bool IsOver()
         {
             if (this._gameOver) return true;
 
@@ -92,15 +104,19 @@ namespace MegaChallengeWar.Classes
 
         public void Turn()
         {
-            if (this.isOver()) return;
+            if (this.IsOver()) return;
 
             Card playerOneCard = this.PlayerOne.Deck.NextCard();
             Card playerTwoCard = this.PlayerTwo.Deck.NextCard();
 
+            this.Pool.AddCard(playerOneCard);
+            this.Pool.AddCard(playerTwoCard);
+            
+
             if (playerOneCard.Value == playerTwoCard.Value)
             {
-                // this.war();
-
+                this._isWar = true;
+                return;
             }
             else if (playerOneCard.Value > playerTwoCard.Value)
             {
@@ -109,10 +125,11 @@ namespace MegaChallengeWar.Classes
             }
             else
             {
-
                 this.PlayerTwo.Deck.AddCard(playerOneCard);
                 this.PlayerTwo.Deck.AddCard(playerTwoCard);
             }
+
+            this._isWar = false;
 
         }
 
