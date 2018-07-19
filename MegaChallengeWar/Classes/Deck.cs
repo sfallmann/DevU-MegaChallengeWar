@@ -24,10 +24,9 @@ namespace MegaChallengeWar.Classes
             return this._cards.Dequeue();
         }
 
-        public Queue<Card> GetCards()
+        public Deck()
         {
-            return this._cards;
+            this._cards = new Queue<Card>();
         }
-
     }
 }

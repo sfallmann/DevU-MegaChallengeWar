@@ -31,6 +31,7 @@ namespace MegaChallengeWar.Classes
             this._playerOne = playerOne;
             this._playerTwo = playerTwo;
             this._deck = new Deck();
+            this.initializeDeck();
         }
 
         private void initializeDeck()
