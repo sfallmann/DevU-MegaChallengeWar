@@ -10,7 +10,8 @@ namespace MegaChallengeWar.Classes
         private Player _playerOne;
         private Player _playerTwo;
         private Deck _deck;
-        
+        private bool _gameOver = false;
+        private Player _winner;
 
         public Player PlayerOne
         {
@@ -61,6 +62,17 @@ namespace MegaChallengeWar.Classes
                     }
                 }
             }
+        }
+
+        public Player GetWinner()
+        {
+            if (!this._gameOver)
+                return null;
+
+            int playerOneCardCount = this._playerOne.Deck.Cards.Count;
+            int playerTwoCardCount = this._playerTwo.Deck.Cards.Count;
+
+            return this._winner;
         }
 
     }
