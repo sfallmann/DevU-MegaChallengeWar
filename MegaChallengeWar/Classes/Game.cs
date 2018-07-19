@@ -64,6 +64,15 @@ namespace MegaChallengeWar.Classes
             }
         }
 
+        public void DealCards()
+        {
+            while (this._deck.Cards.Count > 0)
+            {
+                this._playerOne.Deck.AddCard(this._deck.NextCard());
+                this._playerTwo.Deck.AddCard(this._deck.NextCard());
+            }
+        }
+
         public Player GetWinner()
         {
             if (!this._gameOver)
