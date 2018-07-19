@@ -18,11 +18,13 @@ namespace MegaChallengeWar.Classes
 
             StringBuilder resultsSb = new StringBuilder();
 
+            game.Deck.Shuffle();
+
             foreach(Card card in game.Deck.Cards)
             {
                 resultsSb.Append($"{card.Value} - {card.Suit.ToString()} - {card.Face.ToString()}<br/>");
             }
-
+            resultsSb.Append($"<hr/>Count: {game.Deck.Cards.Count}");
             resultsLabel.Text = resultsSb.ToString();
         }
     }

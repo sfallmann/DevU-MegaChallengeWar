@@ -10,6 +10,7 @@ namespace MegaChallengeWar.Classes
         private Player _playerOne;
         private Player _playerTwo;
         private Deck _deck;
+        
 
         public Player PlayerOne
         {
@@ -38,7 +39,7 @@ namespace MegaChallengeWar.Classes
         {
             foreach (Card.Suits suit in Enum.GetValues(typeof (Card.Suits)))
             {
-                for (var value = 1; value < 15; value++)
+                for (var value = 2; value < 15; value++)
                 {
                     switch (value)
                     {
