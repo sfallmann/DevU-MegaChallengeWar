@@ -14,19 +14,43 @@ namespace MegaChallengeWar.Classes
         {
             Player playerOne = new Player("Sean", new Deck());
             Player playerTwo = new Player("Jessica", new Deck());
+
             Game game = new Game(playerOne, playerTwo);
 
             StringBuilder resultsSb = new StringBuilder();
 
             game.Deck.Shuffle();
+            
+            resultsLabel.Text += "<hr/>";
+            
+            resultsLabel.Text += game.DealCards();
 
-            foreach(Card card in game.Deck.Cards)
+            Player turnWinner;
+            Player gameWinner;
+            
+            while (!game.Over)
             {
-                resultsSb.Append($"{card.Value} - {card.Suit.ToString()} - {card.Face.ToString()}<br/>");
-            }
-            resultsSb.Append($"<hr/>Count: {game.Deck.Cards.Count}");
+                resultsSb.Append(TextHelper.DisplayPlayerCards(playerOne, playerTwo));
 
+                if ((turnWinner = game.Turn()) == null)
+                {
+                    resultsSb.Append("<br>====================<br/>WAR!</br>====================<br/>");
+                    resultsSb.Append(TextHelper.DisplayDeck(game.Pool));
+                }
+                else
+                {
+                    resultsSb.Append($"{turnWinner.Name} won the turn!<br/><hr/><br/>");
+                }
+                resultsLabel.Text = resultsSb.ToString();
+            }
+
+            gameWinner = game.GetWinner();
+            resultsSb.Append($"{gameWinner.Name} won the game!<br/><hr/><br/>");
             resultsLabel.Text = resultsSb.ToString();
+
         }
+
+
     }
+
 }

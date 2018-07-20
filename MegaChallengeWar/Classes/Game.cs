@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace MegaChallengeWar.Classes
@@ -10,9 +11,10 @@ namespace MegaChallengeWar.Classes
         private Player _playerOne;
         private Player _playerTwo;
         private Deck _deck;
-        private Deck _pool;
+        private Deck _pool = new Deck();
         private bool _isWar = false;
         private bool _gameOver = false;
+        private int _winThreshold;
 
         public Player PlayerOne
         {
@@ -39,12 +41,23 @@ namespace MegaChallengeWar.Classes
             get { return _isWar; }
         }
 
-        public Game(Player playerOne, Player playerTwo)
+        public bool Over
+        {
+            get { return _gameOver; }
+        }
+
+        public int WinThreshold
+        {
+            get { return _winThreshold; }
+        }
+
+        public Game(Player playerOne, Player playerTwo, int winThreshold = 20)
         {
             this._playerOne = playerOne;
             this._playerTwo = playerTwo;
             this._deck = new Deck();
             this.initializeDeck();
+            this._winThreshold = winThreshold < 0 ? 0 : winThreshold;
         }
 
         private void initializeDeck()
@@ -75,72 +88,83 @@ namespace MegaChallengeWar.Classes
             }
         }
 
-        public void DealCards()
+        public string DealCards()
         {
+            StringBuilder sb = new StringBuilder();
+
             while (this._deck.Cards.Count > 0)
             {
-                this.PlayerOne.Deck.AddCard(this._deck.NextCard());
-                this.PlayerTwo.Deck.AddCard(this._deck.NextCard());
+                
+                Card playerOneCard = this.Deck.NextCard();
+                sb.Append($"{this.PlayerOne.Name} dealt {TextHelper.DisplayCard(playerOneCard)}");
+
+                Card playerTwoCard = this.Deck.NextCard();
+                sb.Append($"{this.PlayerTwo.Name} dealt {TextHelper.DisplayCard(playerTwoCard)}");
+
+                this.PlayerOne.Deck.AddCard(playerOneCard);
+                this.PlayerTwo.Deck.AddCard(playerTwoCard);
             }
+
+            return sb.ToString();
         }
 
-        private void checkGameStatus()
+        public void AwardCards(Player player)
         {
-
-        }
-
-        private bool IsOver()
-        {
-            if (this._gameOver) return true;
-
-            if (this.GetWinner() != null)
+            while(this.Pool.Cards.Count > 0)
             {
-                this._gameOver = true;
-                return true;
+                player.Deck.AddCard(this.Pool.NextCard());
             }
-
-            return false;
         }
 
-        public void Turn()
+        public Player Turn()
         {
-            if (this.IsOver()) return;
+            if (this.Over) return null;
 
             Card playerOneCard = this.PlayerOne.Deck.NextCard();
             Card playerTwoCard = this.PlayerTwo.Deck.NextCard();
+            Player turnWinner;
 
             this.Pool.AddCard(playerOneCard);
             this.Pool.AddCard(playerTwoCard);
-            
 
             if (playerOneCard.Value == playerTwoCard.Value)
             {
                 this._isWar = true;
-                return;
+                return null;
             }
             else if (playerOneCard.Value > playerTwoCard.Value)
             {
-                this.PlayerOne.Deck.AddCard(playerOneCard);
-                this.PlayerOne.Deck.AddCard(playerTwoCard);
+                turnWinner = this.PlayerOne;
             }
             else
             {
-                this.PlayerTwo.Deck.AddCard(playerOneCard);
-                this.PlayerTwo.Deck.AddCard(playerTwoCard);
+                turnWinner = this.PlayerTwo;
             }
 
+            this.AwardCards(turnWinner);
             this._isWar = false;
 
+            if (this.GetWinner() != null) this._gameOver = true;
+
+            return turnWinner;
         }
 
         public Player GetWinner()
         {
-            if (!this._gameOver) return null;
-
             int playerOneCardCount = this._playerOne.Deck.Cards.Count;
             int playerTwoCardCount = this._playerTwo.Deck.Cards.Count;
 
-            return playerOneCardCount == 0 ? this.PlayerOne : this.PlayerTwo;
+            if (playerOneCardCount == this.WinThreshold)
+            {
+                return this.PlayerTwo;
+            }
+
+            if (playerTwoCardCount == this.WinThreshold)
+            {
+                return this.PlayerOne;
+            }
+
+            return null;
         }
 
     }
