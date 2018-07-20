@@ -97,9 +97,11 @@ namespace MegaChallengeWar.Classes
                 
                 Card playerOneCard = this.Deck.NextCard();
                 sb.Append($"{this.PlayerOne.Name} dealt {TextHelper.DisplayCard(playerOneCard)}");
+                sb.Append("<br/>");
 
                 Card playerTwoCard = this.Deck.NextCard();
                 sb.Append($"{this.PlayerTwo.Name} dealt {TextHelper.DisplayCard(playerTwoCard)}");
+                sb.Append("<br/>");
 
                 this.PlayerOne.Deck.AddCard(playerOneCard);
                 this.PlayerTwo.Deck.AddCard(playerTwoCard);

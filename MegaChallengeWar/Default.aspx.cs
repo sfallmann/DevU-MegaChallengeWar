@@ -20,10 +20,10 @@ namespace MegaChallengeWar.Classes
             StringBuilder resultsSb = new StringBuilder();
 
             game.Deck.Shuffle();
-            
-            resultsLabel.Text += "<hr/>";
-            
-            resultsLabel.Text += game.DealCards();
+
+            resultsSb.Append("Dealing cards...<hr/>");
+            resultsSb.Append(game.DealCards());
+            resultsSb.Append("<hr/><br/><br/>");
 
             Player turnWinner;
             Player gameWinner;
@@ -36,17 +36,24 @@ namespace MegaChallengeWar.Classes
                 {
                     resultsSb.Append("<br>====================<br/>WAR!</br>====================<br/>");
                     resultsSb.Append(TextHelper.DisplayDeck(game.Pool));
+                    resultsSb.Append("<br/>");
                 }
                 else
                 {
-                    resultsSb.Append($"{turnWinner.Name} won the turn!<br/><hr/><br/>");
+                    resultsSb.Append($"<br/><br/>**************<br/>{turnWinner.Name} won the turn!<br/><br/><br/>");
                 }
                 resultsLabel.Text = resultsSb.ToString();
             }
 
             gameWinner = game.GetWinner();
-            resultsSb.Append($"{gameWinner.Name} won the game!<br/><hr/><br/>");
+
+            resultsSb.Append($"<hr/>{gameWinner.Name} won the game!<hr/><br/><br/>");
+            resultsSb.Append($"{playerOne.Name} final count: {playerOne.Deck.Cards.Count}<br/>");
+            resultsSb.Append($"{playerTwo.Name} final count: {playerTwo.Deck.Cards.Count}");
+
             resultsLabel.Text = resultsSb.ToString();
+
+
 
         }
 
